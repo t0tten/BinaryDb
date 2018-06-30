@@ -16,14 +16,21 @@ void Table::setTableName (std::string name) {
 }
 
 void Table::add (Record* record) {
+	this->records.add(record);
 }
 
 bool Table::remove (Record* record) {
-	return false;
+	return this->records.remove (record);
 }
 
-Record*& get (int id) {
+Record*& Table::get (Record* record) {
+	try {
+		return this->records.find(record);
+	} catch (char const* e) {
+		throw e;
+	}
 }
 
-Record*& get (std::string name) {
+int Table::getSize () {
+	return this->records.size();
 }

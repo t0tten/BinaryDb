@@ -39,7 +39,7 @@ class Tree {
 
 		void add (T item);
 		bool remove (T item);
-		T find (T item) const;
+		T& find (T item) const;
 
 		T getMin () const;
 		T getMax () const;
@@ -170,7 +170,7 @@ bool Tree<T>::remove (T item) {
 }
 
 template <class T>
-T Tree<T>::find (T item) const {
+T& Tree<T>::find (T item) const {
 	Node<T>* walker = this->root;
 	while (walker != NULL) {
 		if (item == walker->item) {

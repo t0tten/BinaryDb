@@ -8,7 +8,7 @@
 class Table {
 	private:
 		std::string name;
-		Tree<Record*> record;
+		Tree<Record*> records;
 	public:
 		Table(std::string name);
 		~Table();
@@ -19,8 +19,9 @@ class Table {
 		void add (Record* record);
 		bool remove (Record* record);
 
-		Record*& get (int id);
-		Record*& get (std::string name);
+		Record*& get (Record* record);
+
+		int getSize ();
 };
 
 #endif // _TABLE_H_
