@@ -99,6 +99,16 @@ int Record::find (std::string name) {
 	return -1;
 }
 
+void Record::print (int index) {
+	std::cout << this->record[index]->toString() << std::endl;
+}
+
+Item*& Record::at (int index) {
+	if (index <= 0 && index < this->size) {
+		return this->record[index];
+	}
+	throw "Index out of bounds exception.";
+}
 
 int Record::getSize () { return this->size; }
 bool Record::isEmpty () { return this->size == 0; }

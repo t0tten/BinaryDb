@@ -4,6 +4,7 @@
 #include "StringItem.h"
 #include "IntItem.h"
 #include "DoubleItem.h"
+#include <iostream>
 
 class Record {
 	private:
@@ -24,6 +25,9 @@ class Record {
 		int find (Item* item);
 		int find (int id);
 		int find (std::string name);
+
+		Item*& at (int index);
+		void print (int index);
 
 		int getSize ();
 		bool isEmpty ();
