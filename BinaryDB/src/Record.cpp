@@ -45,8 +45,8 @@ void Record::add (Item* item) {
 bool Record::_remove (int index) {
 	if(index != -1) {
 		delete this->record[index];
-		this->record[index] = this->record[this->size];
-		this->record[this->size] = NULL;
+		this->record[index] = this->record[this->size - 1];
+		this->record[this->size - 1] = NULL;
 		this->size--;
 		return true;
 	} else {
@@ -67,6 +67,7 @@ bool Record::remove (std::string name) {
 bool Record::updateItem (int id, Item* item) {
 	int index = this->find (id);
 	if (index != -1) {
+		delete this->record[index];
 		this->record[index] = item;
 		return true;
 	} else {
@@ -104,7 +105,7 @@ void Record::print (int index) {
 }
 
 Item*& Record::at (int index) {
-	if (index <= 0 && index < this->size) {
+	if (index >= 0 && index < this->size) {
 		return this->record[index];
 	}
 	throw "Index out of bounds exception.";

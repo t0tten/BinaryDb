@@ -7,10 +7,14 @@ IntItem::IntItem (int id, std::string name, int item) : Item (id, name, Item::DB
 IntItem::~IntItem () {
 }
 
-std::string IntItem::pToString() {
+std::string IntItem::pToString () {
 	return "Item: " + std::to_string(this->item);
 }
 
-int IntItem::getItem() const {
+int IntItem::getItem () const {
 	return this->item;
+}
+
+void IntItem::setItem (int item) {
+	this->item = item;
 }

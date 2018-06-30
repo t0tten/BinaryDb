@@ -6,10 +6,10 @@ ODIR	= src/obj
 IDIR	= include
 SDIR	= src
 
-_DEPS	= Tree.h Item.h StringItem.h IntItem.h DoubleItem.h Record.h
+_DEPS	= Tree.h Item.h StringItem.h IntItem.h DoubleItem.h Record.h Table.h
 DEPS	= $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ	= Main.o StringItem.o IntItem.o DoubleItem.o Record.o
+_OBJ	= Main.o StringItem.o IntItem.o DoubleItem.o Record.o Table.o
 OBJ	= $(patsubst %,$(SDIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)

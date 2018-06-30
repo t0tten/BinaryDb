@@ -24,8 +24,12 @@ class Item {
 		virtual ~Item () {}
 
 		int getId () { return this->id; }
+		void setId (int id) { this->id = id; };
+
 		int getType () { return this->type; }
+		
 		std::string getName () { return this->name; }
+		void setName (std::string name) { this->name = name; }
 
 		std::string getTypeAsString () {
 			switch(this->type) {

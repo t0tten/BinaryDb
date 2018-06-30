@@ -15,6 +15,7 @@ class DoubleItem : public Item {
 		~DoubleItem();
 
 		double getItem () const;
+		void setItem (double item);
 		
 };
 

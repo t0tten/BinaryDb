@@ -14,3 +14,6 @@ std::string DoubleItem::pToString() {
 double DoubleItem::getItem() const {
 	return this->item;
 }
+void DoubleItem::setItem (double item) {
+	this->item = item;
+}

@@ -7,10 +7,14 @@ StringItem::StringItem (int id, std::string name, std::string item) : Item (id, 
 StringItem::~StringItem () {
 }
 
-std::string StringItem::pToString() {
+std::string StringItem::pToString () {
 	return "Item: " + this->item;
 }
 
-std::string StringItem::getItem() const {
+std::string StringItem::getItem () const {
 	return this->item;
+}
+
+void StringItem::setItem (std::string item) {
+	this->item = item;
 }

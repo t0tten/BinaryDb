@@ -15,6 +15,7 @@ class IntItem : public Item {
 		~IntItem();
 
 		int getItem () const;
+		void setItem (int item);
 		
 };
 

@@ -15,6 +15,7 @@ class StringItem : public Item {
 		~StringItem();
 
 		std::string getItem () const;
+		void setItem (std::string item);
 		
 };
 
