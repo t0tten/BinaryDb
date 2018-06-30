@@ -39,13 +39,13 @@ class Tree {
 
 		void add (T item);
 		bool remove (T item);
-		T find (T item);
+		T find (T item) const;
 
-		T getMin ();
-		T getMax ();
+		T getMin () const;
+		T getMax () const;
 
-		bool isEmpty ();
-		int size ();
+		bool isEmpty () const;
+		int size () const;
 		void clear ();
 };
 
@@ -170,7 +170,7 @@ bool Tree<T>::remove (T item) {
 }
 
 template <class T>
-T Tree<T>::find (T item) {
+T Tree<T>::find (T item) const {
 	Node<T>* walker = this->root;
 	while (walker != NULL) {
 		if (item == walker->item) {
@@ -186,7 +186,7 @@ T Tree<T>::find (T item) {
 }
 
 template <class T>
-T Tree<T>::getMin () {
+T Tree<T>::getMin () const {
 	Node<T>* walker = this->root;
 	while (walker->left != NULL) {
 		walker = walker->left;
@@ -195,7 +195,7 @@ T Tree<T>::getMin () {
 }
 
 template <class T>
-T Tree<T>::getMax () {
+T Tree<T>::getMax () const {
 	Node<T>* walker = this->root;
 	while (walker->right != NULL) {
 		walker = walker->right;
@@ -204,12 +204,12 @@ T Tree<T>::getMax () {
 }
 
 template <class T>
-bool Tree<T>::isEmpty () {
+bool Tree<T>::isEmpty () const {
 	return this->root == NULL;
 }
 
 template <class T>
-int Tree<T>::size () {
+int Tree<T>::size () const {
 	return this->iSize;
 }
 
