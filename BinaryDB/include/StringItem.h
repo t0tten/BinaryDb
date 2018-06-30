@@ -2,6 +2,7 @@
 #define _STRING_ITEM_H_
 
 #include <unistd.h>
+#include <string>
 #include "Item.h"
 
 class StringItem : public Item {

@@ -1,4 +1,5 @@
-CC	= g++
+CXX	= g++
+CXXFLAGS= -std=c++11
 
 BNAME	= BinaryDb
 BDIR	= bin
@@ -13,13 +14,13 @@ _OBJ	= Main.o StringItem.o IntItem.o DoubleItem.o Record.o Table.o Database.o Bi
 OBJ	= $(patsubst %,$(SDIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< 
+	$(CXX) -c -o $@ $<
 
 $(BDIR)/$(BNAME): $(OBJ)
 	@if [ ! -d $(BDIR) ]; then \
 		mkdir $(BDIR); \
 	fi
-	$(CC) -o $@ $^ 
+	$(CXX) -o $@ $^
 	@echo " << Make: done >> "
 	@echo "Run: make run"
 	@echo "Clean: make clean"
