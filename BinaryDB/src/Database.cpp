@@ -84,6 +84,15 @@ Table*& Database::tableAt (int index) {
 	throw "Index out ot bounds exception.";
 }
 
+Table*& Database::findTable (std::string name) {
+	for (int i = 0; i < this->size; i++) {
+		if (this->tables[i]->getTableName() == name) {
+			return this->tables[i];
+		}
+	}
+	throw "Index out ot bounds exception.";
+}
+
 std::string* Database::listTables () {
 	if (this->size < 0) {
 		return NULL;

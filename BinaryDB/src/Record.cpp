@@ -111,6 +111,64 @@ Item*& Record::at (int index) {
 	throw "Index out of bounds exception.";
 }
 
+int* Record::getItemTypes () {
+	int* types = NULL;
+
+	if (this->size > 0) {
+		types = new int[this->size];
+		for (int i = 0; i < this->size; i++) {
+			types[i] = this->record[i]->getType();	
+		}
+	}
+	return types;
+}
+
+std::string* Record::getItemAsStringArray () const {
+	std::string* strItems = NULL;
+	
+	if (this->size > 0) {
+		strItems = new std::string[this->size];
+		for (int i = 0; i < this->size; i++) {
+			Item* item = this->record[i];
+			if (StringItem* sItem = dynamic_cast<StringItem*>(item)) {
+				strItems[i] = sItem->getName() + ":" + sItem->getItem();
+			} else if (IntItem* iItem = dynamic_cast<IntItem*>(item)) {
+				strItems[i] = iItem->getName() + ":" + std::to_string(iItem->getItem());
+			} else if (DoubleItem* dItem = dynamic_cast<DoubleItem*>(item)) {
+				strItems[i] = dItem->getName() + ":" + std::to_string(dItem->getItem());
+			}
+		}
+	}
+	return strItems;
+}
+
 int Record::getSize () { return this->size; }
 bool Record::isEmpty () { return this->size == 0; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

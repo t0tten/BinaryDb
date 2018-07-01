@@ -32,6 +32,7 @@ class Tree {
 
 		int iSize;
 		Node<T>* root;
+		void convertTreeToArray(Node<T>* node, T*& arr, int position);
 
 	public:
 		Tree ();
@@ -41,8 +42,11 @@ class Tree {
 		bool remove (T item);
 		T& find (T item) const;
 
-		T getMin () const;
-		T getMax () const;
+		T& getMin () const;
+		T& getMax () const;
+		T& getFirst () const;
+
+		T* getAllItemsAsArray ();
 
 		bool isEmpty () const;
 		int size () const;
@@ -186,7 +190,7 @@ T& Tree<T>::find (T item) const {
 }
 
 template <class T>
-T Tree<T>::getMin () const {
+T& Tree<T>::getMin () const {
 	Node<T>* walker = this->root;
 	while (walker->left != NULL) {
 		walker = walker->left;
@@ -195,12 +199,46 @@ T Tree<T>::getMin () const {
 }
 
 template <class T>
-T Tree<T>::getMax () const {
+T& Tree<T>::getMax () const {
 	Node<T>* walker = this->root;
 	while (walker->right != NULL) {
 		walker = walker->right;
 	}
 	return walker->item;
+}
+
+template <class T>
+T& Tree<T>::getFirst () const {
+	return this->root->item;
+}
+
+template <class T>
+void Tree<T>::convertTreeToArray(Node<T>* node, T*& arr, int position) {
+	if (node != NULL) {
+		arr[position] = node->item;
+
+		if(node->left != NULL) {
+			position++;
+			this->convertTreeToArray(node->left, arr, position);
+		}
+
+		if(node->right != NULL) {
+			position++;
+			this->convertTreeToArray(node->left, arr, position);
+		}
+	}
+} 
+
+template <class T>
+T* Tree<T>::getAllItemsAsArray () {
+	T* allItems = NULL;
+	
+	if (this->iSize > 0) {
+		allItems = new T[this->iSize];
+		int position = 0;
+		this->convertTreeToArray(this->root, allItems, position);
+	}
+	return allItems;
 }
 
 template <class T>

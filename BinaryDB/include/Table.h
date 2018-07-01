@@ -20,6 +20,9 @@ class Table {
 		bool remove (Record* record);
 
 		Record*& get (Record* record);
+		std::string**& getAllItemsAsStringArray ();
+		
+		int* getItemTypes (); 
 
 		int getSize ();
 };

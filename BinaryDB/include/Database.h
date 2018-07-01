@@ -23,7 +23,9 @@ class Database {
 
 		void addTable (Table* table);
 		bool removeTable (std::string name);
+
 		Table*& tableAt (int index);
+		Table*& findTable (std::string name);
 
 		std::string* listTables ();
 

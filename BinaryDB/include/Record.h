@@ -28,6 +28,9 @@ class Record {
 
 		Item*& at (int index);
 		void print (int index);
+		
+		int* getItemTypes();
+		std::string* getItemAsStringArray () const;
 
 		int getSize ();
 		bool isEmpty ();
