@@ -11,10 +11,14 @@
 
 using namespace std;
 
+void showLogo();
+void showMenu();
 void printStringArray (std::string* arr, int length);
 bool addRecordToTable (Database*& database, std::string tableName, Record* record);
 
 int main() {
+	showLogo();
+	showMenu();
 	Item* id 		= new IntItem(0, "id", 0);
 	Item* username 		= new StringItem(1, "username", "MrBig");
 	Item* firstname 	= new StringItem(2, "firstname", "Carl-Gustav");
@@ -44,6 +48,22 @@ int main() {
 	cout << "Databases: " << endl;
 	printStringArray (names, binaryDB.getSize());
 	delete[] names;
+}
+
+void showLogo () {
+	cout << "         _____  ___                            ______  ______" << endl;
+	cout << "        /  __ \\/__/                           /  ___ \\/  __  \\" << endl;
+	cout << "       /  /_/ /_________  ____  _____  __  __/  /  / /  /_/  /" << endl;
+	cout << "      /     _//  /      \\/ __ \\/  __ \\/ /_/ /  /  /  /     _/" << endl;
+	cout << "     /  __  \\/  /  __   / /_/ /  /_/_/____  /  /  / /  __  \\" << endl;
+	cout << "    /  /_/  /  /  / /  / __  /  __  \\ ___/ /  /__/ /  /_/  /" << endl;
+	cout << "   /_______/__/__/ /__/_/ /_/__/ /__//____/________/______/" << endl;
+	cout << "                                           MUELLE v.1.0" << endl;
+	cout << "  -------------------------------------------------------" << endl;
+	cout << " -------------------------------------------------------" << endl << endl;
+}
+
+void showMenu () {
 }
 
 void printStringArray (std::string* arr, int length) {
