@@ -44,7 +44,7 @@ class Tree {
 
 		T& getMin () const;
 		T& getMax () const;
-		T& getFirst () const;
+		T getFirst () const;
 
 		T* getAllItemsAsArray ();
 
@@ -208,8 +208,12 @@ T& Tree<T>::getMax () const {
 }
 
 template <class T>
-T& Tree<T>::getFirst () const {
-	return this->root->item;
+T Tree<T>::getFirst () const {
+	if (this->root != NULL) {
+		return this->root->item;
+	}
+
+	throw "Tree not initialized yet";
 }
 
 template <class T>

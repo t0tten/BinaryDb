@@ -8,7 +8,7 @@
 class Table {
 	private:
 		std::string name;
-		Tree<Record*> records;
+		Tree<Record*>* records;
 	public:
 		Table(std::string name);
 		~Table();

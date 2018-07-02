@@ -8,13 +8,14 @@
 
 class Record {
 	private:
+		int compareIndex;
 		int maxSize;
 		int size;
 		Item** record;
-
+		
 		bool _remove (int index);
 	public:
-		Record ();
+		Record (int compareIndex);
 		~Record ();
 
 		void add (Item* item);
@@ -34,6 +35,11 @@ class Record {
 
 		int getSize ();
 		bool isEmpty ();
+
+		bool operator< (const Record*& rhs);
+		bool operator> (const Record*& rhs);
+		bool operator<= (const Record*& rhs);
+		bool operator>= (const Record*& rhs);
 };
 
 #endif // _RECORD_H_

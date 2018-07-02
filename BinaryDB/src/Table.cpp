@@ -1,10 +1,12 @@
 #include "../include/Table.h"
 
 Table::Table (std::string name) {
+	this->records = new Tree<Record*>;
 	this->name = name;
 }
 
 Table::~Table() {
+	delete this->records;
 }
 
 std::string Table::getTableName () {
@@ -16,29 +18,29 @@ void Table::setTableName (std::string name) {
 }
 
 void Table::add (Record* record) {
-	this->records.add(record);
+	this->records->add(record);
 }
 
 bool Table::remove (Record* record) {
-	return this->records.remove (record);
+	return this->records->remove (record);
 }
 
 Record*& Table::get (Record* record) {
 	try {
-		return this->records.find(record);
+		return this->records->find(record);
 	} catch (char const* e) {
 		throw e;
 	}
 }
 
 std::string**& Table::getAllItemsAsStringArray () {
-	std::string** strArr = new std::string*[this->records.size()];
-	for (int i = 0; i < this->records.size(); i++) {
+	std::string** strArr = new std::string*[this->records->size()];
+	for (int i = 0; i < this->records->size(); i++) {
 		strArr[i] = NULL;
 	}
 
-	Record** allRecords = this->records.getAllItemsAsArray();
-	for (int i = 0; i < this->records.size(); i++) {
+	Record** allRecords = this->records->getAllItemsAsArray();
+	for (int i = 0; i < this->records->size(); i++) {
 		strArr[i] = allRecords[i]->getItemAsStringArray ();
 	}
 
@@ -46,10 +48,10 @@ std::string**& Table::getAllItemsAsStringArray () {
 }
 
 int* Table::getItemTypes () {
-	Record* record = this->records.getFirst();
+	Record* record = this->records->getFirst();
 	return record->getItemTypes();	
 }
 
 int Table::getSize () {
-	return this->records.size();
+	return this->records->size();
 }

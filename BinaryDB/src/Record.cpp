@@ -1,8 +1,10 @@
 #include "../include/Record.h"
+#include <iostream>
 
-Record::Record () {
+Record::Record (int compareIndex) {
 	this->maxSize = 10;
 	this->size = 0;
+	this->compareIndex = compareIndex;
 
 	this->record = new Item*[this->maxSize];
 	for (int i = 0; i < this->maxSize; i++) {
@@ -113,13 +115,15 @@ Item*& Record::at (int index) {
 
 int* Record::getItemTypes () {
 	int* types = NULL;
-
+	std::cout << "Record::getItemTypes()" << std::endl;
 	if (this->size > 0) {
+	std::cout << "Size if bugger then 0" << std::endl;
 		types = new int[this->size];
 		for (int i = 0; i < this->size; i++) {
 			types[i] = this->record[i]->getType();	
 		}
 	}
+	std::cout << "Returns" << std::endl;
 	return types;
 }
 
@@ -145,10 +149,32 @@ std::string* Record::getItemAsStringArray () const {
 int Record::getSize () { return this->size; }
 bool Record::isEmpty () { return this->size == 0; }
 
+bool Record::operator< (const Record*& rhs) {
+	if (this->compareIndex < 0 || this->compareIndex > this->size) {
+		this->compareIndex = 0;
+	}
 
+	Item* lhsItem = this->record[this->compareIndex];
+	Item* rhsItem = rhs->record[this->compareIndex];
 
+	if (StringItem* sLItem = dynamic_cast<StringItem*>(lhsItem)) {
+		StringItem* sRItem = dynamic_cast<StringItem*>(rhsItem);
+		return sLItem->getItem() < sRItem->getItem();
 
+	} else if (IntItem* iLItem = dynamic_cast<IntItem*>(lhsItem)) {
+		IntItem* iRItem = dynamic_cast<IntItem*>(rhsItem);
+		return iLItem->getItem() < iRItem->getItem();
+		
+	} else if (DoubleItem* dLItem = dynamic_cast<DoubleItem*>(lhsItem)) {
+		DoubleItem* dRItem = dynamic_cast<DoubleItem*>(rhsItem);
+		return dLItem->getItem() < dRItem->getItem();
 
+	}
+	
+}
+bool Record::operator> (const Record*& rhs) { return !operator< (rhs); }
+bool Record::operator<= (const Record*& rhs) { return !operator>(rhs); }
+bool Record::operator>= (const Record*& rhs) { return operator<(rhs); }
 
 
 

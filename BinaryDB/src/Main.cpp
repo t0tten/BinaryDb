@@ -20,7 +20,7 @@ int main() {
 	Item* firstname 	= new StringItem(2, "firstname", "Carl-Gustav");
 	Item* lastname		= new StringItem(3, "lastname", "Bernadotte");
 
-	Record* row		= new Record();
+	Record* row		= new Record(22);
 	row->add(id);
 	row->add(username);
 	row->add(firstname);
@@ -57,17 +57,17 @@ void printStringArray (std::string* arr, int length) {
 bool addRecordToTable (Database*& database, std::string tableName, Record* record) {
 	try {
 		Table* table 		= database->findTable(tableName);
-		int* tableTypes 	= table->getItemTypes();
-		int* recordTypes 	= record->getItemTypes();
+		try {
+			int* tableTypes 	= table->getItemTypes();
+			int* recordTypes 	= record->getItemTypes();
 
-		if (tableTypes != NULL) {
 			cout << "Types:" << endl;
 			for (int i = 0; i < record->getSize(); i++) {
 					cout << tableTypes[i] << " - " << recordTypes[i] <<  endl;
 			}
 			table->add(record);
 			return true;
-		} else {
+		} catch (char const* e) {
 			table->add(record);
 			return true;
 		}
