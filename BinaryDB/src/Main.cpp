@@ -1,4 +1,9 @@
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <iterator>
 
 #include "../include/Tree.h"
 #include "../include/StringItem.h"
@@ -12,13 +17,26 @@
 using namespace std;
 
 void showLogo();
-void showMenu();
+bool findTask(vector<string> commands);
+void printHelpSection();
+
 void printStringArray (std::string* arr, int length);
 bool addRecordToTable (Database*& database, std::string tableName, Record* record);
 
 int main() {
 	showLogo();
-	showMenu();
+
+	while (1) {
+		cout << ":: ";
+		std::string input = "";
+		getline(cin, input);
+
+		istringstream iss(input);
+		vector<string> commands {istream_iterator<string>(iss), istream_iterator<string>()};
+
+		if (findTask(commands)) return 0;
+	}
+
 	Item* id 		= new IntItem(0, "id", 0);
 	Item* username 		= new StringItem(1, "username", "MrBig");
 	Item* firstname 	= new StringItem(2, "firstname", "Carl-Gustav");
@@ -63,7 +81,55 @@ void showLogo () {
 	cout << " -------------------------------------------------------" << endl <<  endl;
 }
 
-void showMenu () {
+bool findTask (vector<string> commands) {
+	bool exit = false;
+	if (commands.front() == "exit" || 
+		(commands.front().length() == 1 && commands.front() == ".")) {
+		
+		exit = true;
+	} else if (commands.front() == "help" || 
+		(commands.front().length() == 1 && commands.front() == "?")) {
+		
+		printHelpSection();
+
+	// Database stuf here
+	} else if (commands.front().length() == 1 && commands.front() == "$") {
+		
+		cout << "List dbs" << endl;
+	} else if (commands.size() == 1 && 
+			commands.front().length() > 1 && 
+			commands.front()[0] == '$') {
+		
+		cout << "Create db" << endl;
+	} else if (commands.front() == "delete") {
+	} else if (commands.size() == 1 && 
+			commands.front().length() > 2 && 
+			commands.front()[0] == '.' &&
+			commands.front()[1] == '$') {
+		
+		cout << "Delete db" << endl;
+
+	// Table stuf down here
+	} else if (commands.front() == "list") {
+		
+		cout << "List stuf" << endl;
+	}
+	return exit;
+}
+
+void printHelpSection() {
+	cout << endl;
+	cout << "exit or .\t\t\t\texit program" << endl;
+	cout << "help or ?\t\t\t\tshow this help section" << endl;
+	cout << "$\t\t\t\t\tlist all databases" << endl;
+	cout << "$<database name>\t\t\tcreate a new database" << endl;
+	cout << ".$<database name>\t\t\tdeletes database" << endl;
+	cout << endl;
+	//cout << "select <database name>\t-\tselects a database" << endl;
+	cout << "$<database name> #\t\t\tlists all tables after selection" << endl;
+	cout << "$<database name> #<table name>\t\tcreate a new table in a database" << endl;
+	cout << ".$<database name> #<table name>\t\tdelete a table from a database" << endl;
+	cout << endl;
 }
 
 void printStringArray (std::string* arr, int length) {
