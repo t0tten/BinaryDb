@@ -71,20 +71,44 @@ bool findTask (vector<string> commands) {
 	} else if (commands.front().length() == 1 && commands.front() == "$") {
 		
 		// List all databases
-		cout << "List databases:" << endl;
+		std::string* databases = binaryDB.listAllDatabases();
+		if (databases != NULL)  {
+			cout << "Databases:" << endl;
+			for (int i = 0; i < binaryDB.getSize(); i++) {
+				cout << "\t" << databases[i] << endl;
+			}
+		} else {
+			cout << "\t-> No databases exists" << endl;		
+		}
+	
+		delete[] databases;
 	} else if (commands.size() == 1 && 
 			commands.front().length() > 1 && 
 			commands.front()[0] == '$') {
 		// Create databas	
 		cout << "Create database " << commands.front() << "? (y/n): ";
-		if (assurance()) { cout << "GO" << endl; }
+		if (assurance()) { 
+			if (binaryDB.createDatabase(commands.front().substr(1))) {
+				cout << "\t-> Database " << commands.front() << " added" << endl;
+			} else {
+				cout << "\t-> Database " << commands.front() << " already exist" << endl;
+			}
+		}
+
 	} else if (commands.size() == 1 && 
 			commands.front().length() > 2 && 
 			commands.front()[0] == '.' &&
 			commands.front()[1] == '$') {
 		// Delete database
 		cout << "Delete database " << commands.front().substr(1) << "? (y/n): ";
-		if (assurance()) { cout << "GO" << endl; }
+		if (assurance()) {
+			if (binaryDB.deleteDatabase(commands.front().substr(2))) {
+				cout << "\t-> Database " << commands.front().substr(1) << " found" << endl;
+				cout << "\t-> Database " << commands.front().substr(1) << " deleted" << endl;
+			} else {
+				cout << "\t-> Database " << commands.front().substr(1) << " does not exist" << endl;
+			}
+		}
 
 	// Table stuf down here
 	} else if (commands.size() == 2 && 

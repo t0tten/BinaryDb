@@ -18,34 +18,50 @@ BinaryDB::~BinaryDB () {
 	delete[] this->databases;
 }
 
-void BinaryDB::createDatabase (Database* database) {
-	if (this->size >= this->maxSize) {
-		// new array
-		this->maxSize *= 2;
-
-		Database** _tmp = new Database*[this->maxSize];
-		for (int i = 0; i < this->maxSize; i++) {
-			_tmp[i] = NULL;
+bool BinaryDB::createDatabase (std::string name) {
+	if (this->size != 0) {
+		if (this->findDatabase(name) == -1) {
+			if (this->size >= this->maxSize) {
+				// new array
+				this->maxSize *= 2;
+		
+				Database** _tmp = new Database*[this->maxSize];
+				for (int i = 0; i < this->maxSize; i++) {
+					_tmp[i] = NULL;
+				}
+		
+				// copy old
+				for (int i = 0; i < this->size; i++) {
+					_tmp[i] = this->databases[i];
+					this->databases[i] = NULL;
+				}
+		
+				delete[] this->databases;
+				this->databases = _tmp;
+			}
+		
+			this->databases[this->size] = new Database(name);
+			this->size++;
+		} else {
+			return false;
 		}
-
-		// copy old
-		for (int i = 0; i < this->size; i++) {
-			_tmp[i] = this->databases[i];
-			this->databases[i] = NULL;
-		}
-
-		delete[] this->databases;
-		this->databases = _tmp;
+	} else {
+		this->databases[this->size] = new Database(name);
+		this->size++;
 	}
 
-	this->databases[this->size] = database;
-	this->size++;
+	return true;
 }
 
 bool BinaryDB::deleteDatabase (std::string name) {
 	int index = this->findDatabase(name);
 
 	if (index != -1) {
+		delete this->databases[index];
+		this->databases[index] = NULL;
+		this->databases[index] = this->databases[this->size];
+		this->databases[this->size] = NULL;
+		this->size--;
 		return true;
 	} else {
 		return false;

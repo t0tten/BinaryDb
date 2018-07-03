@@ -18,7 +18,7 @@ class BinaryDB {
 		BinaryDB ();
 		~BinaryDB ();
 		
-		void createDatabase (Database* database);
+		bool createDatabase (std::string name);
 		bool deleteDatabase (std::string name);
 		bool databaseExist (std::string name);
 		Database*& getDatabase (std::string name);
