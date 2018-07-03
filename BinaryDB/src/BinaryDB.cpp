@@ -1,4 +1,5 @@
 #include "../include/BinaryDB.h"
+#include <iostream>
 
 BinaryDB::BinaryDB () {
 	this->name = "BinaryDB";
@@ -59,8 +60,10 @@ bool BinaryDB::deleteDatabase (std::string name) {
 	if (index != -1) {
 		delete this->databases[index];
 		this->databases[index] = NULL;
-		this->databases[index] = this->databases[this->size];
-		this->databases[this->size] = NULL;
+		if (this->size > 1) {
+			this->databases[index] = this->databases[this->size - 1];
+			this->databases[this->size - 1] = NULL;
+		}
 		this->size--;
 		return true;
 	} else {

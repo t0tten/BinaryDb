@@ -75,7 +75,7 @@ bool findTask (vector<string> commands) {
 		if (databases != NULL)  {
 			cout << "Databases:" << endl;
 			for (int i = 0; i < binaryDB.getSize(); i++) {
-				cout << "\t" << databases[i] << endl;
+				cout << "\t$" << databases[i] << endl;
 			}
 		} else {
 			cout << "\t-> No databases exists" << endl;		
