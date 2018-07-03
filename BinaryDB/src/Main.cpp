@@ -18,10 +18,10 @@ using namespace std;
 
 void showLogo();
 bool findTask(vector<string> commands);
+bool assurance ();
 void printHelpSection();
 
-void printStringArray (std::string* arr, int length);
-bool addRecordToTable (Database*& database, std::string tableName, Record* record);
+BinaryDB binaryDB;
 
 int main() {
 	showLogo();
@@ -37,35 +37,7 @@ int main() {
 		if (findTask(commands)) return 0;
 	}
 
-	Item* id 		= new IntItem(0, "id", 0);
-	Item* username 		= new StringItem(1, "username", "MrBig");
-	Item* firstname 	= new StringItem(2, "firstname", "Carl-Gustav");
-	Item* lastname		= new StringItem(3, "lastname", "Bernadotte");
 
-	Record* row		= new Record(22);
-	row->add(id);
-	row->add(username);
-	row->add(firstname);
-	row->add(lastname);
-
-	Database* webshop	= new Database ("Webshop");
-	Table* table		= new Table("login_credentials");
-	webshop->addTable(table);
-
-	if (addRecordToTable (webshop, "login_credentials", row)) {
-		cout << "Row added!" << endl;
-	} else {
-		cout << "Error - Add row!" << endl;
-	}
-
-	BinaryDB binaryDB;
-	binaryDB.createDatabase(webshop);
-
-	// Print databases
-	std::string* names = binaryDB.listAllDatabases();
-	cout << "Databases: " << endl;
-	printStringArray (names, binaryDB.getSize());
-	delete[] names;
 }
 
 void showLogo () {
@@ -83,7 +55,10 @@ void showLogo () {
 
 bool findTask (vector<string> commands) {
 	bool exit = false;
-	if (commands.front() == "exit" || 
+	
+	if (commands.size() == 0) {
+		// Do nothing
+	} else if (commands.front() == "exit" || 
 		(commands.front().length() == 1 && commands.front() == ".")) {
 		
 		exit = true;
@@ -95,26 +70,63 @@ bool findTask (vector<string> commands) {
 	// Database stuf here
 	} else if (commands.front().length() == 1 && commands.front() == "$") {
 		
-		cout << "List dbs" << endl;
+		// List all databases
+		cout << "List databases:" << endl;
 	} else if (commands.size() == 1 && 
 			commands.front().length() > 1 && 
 			commands.front()[0] == '$') {
-		
-		cout << "Create db" << endl;
-	} else if (commands.front() == "delete") {
+		// Create databas	
+		cout << "Create database " << commands.front() << "? (y/n): ";
+		if (assurance()) { cout << "GO" << endl; }
 	} else if (commands.size() == 1 && 
 			commands.front().length() > 2 && 
 			commands.front()[0] == '.' &&
 			commands.front()[1] == '$') {
-		
-		cout << "Delete db" << endl;
+		// Delete database
+		cout << "Delete database " << commands.front().substr(1) << "? (y/n): ";
+		if (assurance()) { cout << "GO" << endl; }
 
 	// Table stuf down here
-	} else if (commands.front() == "list") {
+	} else if (commands.size() == 2 && 
+			commands.front().length() > 1 && 
+			commands.front()[0] == '$' &&
+			commands.at(1).length() == 1 &&
+			commands.at(1)[0] == '#') {
+
+		cout << "List tables (" << commands.front() << "):" << endl;
+	} else if (commands.size() == 2 && 
+			commands.front().length() > 1 && 
+			commands.front()[0] == '$' &&
+			commands.at(1).length() > 1 &&
+			commands.at(1)[0] == '#') {
 		
-		cout << "List stuf" << endl;
+		cout << "Create table " << commands.at(1) << " (" << commands.front() << ")? (y/n): ";
+		if (assurance()) { cout << "GO" << endl; }
+	} else if (commands.size() == 2 && 
+			commands.front().length() > 1 && 
+			commands.front()[0] == '.' &&
+			commands.front()[1] == '$' &&
+			commands.at(1).length() > 1 &&
+			commands.at(1)[0] == '#') {
+
+		cout << "Delete table " << commands.at(1) << " (" << commands.front().substr(1) << ")? (y/n): ";
+		if (assurance()) { cout << "GO" << endl; }
+	} else {
+		cout << " !!! invalid command !!!" << endl;
 	}
+
 	return exit;
+}
+
+bool assurance () {
+	std::string input = "";
+	getline(cin, input);
+
+	if (input != "" && (input[0] == 'y' || input[0] == 'Y')) {
+		return true;
+	}
+
+	return false;
 }
 
 void printHelpSection() {
@@ -125,75 +137,8 @@ void printHelpSection() {
 	cout << "$<database name>\t\t\tcreate a new database" << endl;
 	cout << ".$<database name>\t\t\tdeletes database" << endl;
 	cout << endl;
-	//cout << "select <database name>\t-\tselects a database" << endl;
 	cout << "$<database name> #\t\t\tlists all tables after selection" << endl;
 	cout << "$<database name> #<table name>\t\tcreate a new table in a database" << endl;
 	cout << ".$<database name> #<table name>\t\tdelete a table from a database" << endl;
 	cout << endl;
 }
-
-void printStringArray (std::string* arr, int length) {
-	if (arr != NULL) {
-		for (int i = 0; i < length; i++) {
-			cout << arr[i] << endl;
-		}
-	}
-}
-
-bool addRecordToTable (Database*& database, std::string tableName, Record* record) {
-	try {
-		Table* table 		= database->findTable(tableName);
-		try {
-			int* tableTypes 	= table->getItemTypes();
-			int* recordTypes 	= record->getItemTypes();
-
-			cout << "Types:" << endl;
-			for (int i = 0; i < record->getSize(); i++) {
-					cout << tableTypes[i] << " - " << recordTypes[i] <<  endl;
-			}
-			table->add(record);
-			return true;
-		} catch (char const* e) {
-			table->add(record);
-			return true;
-		}
-	} catch (char const* e) {}
-	return false;
-}
-
-void printTable (Database* database, std::string tableName) {
-	try {
-		Table* table = database->findTable(tableName);
-				
-
-	} catch (char const* e) {}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
