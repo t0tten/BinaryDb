@@ -22,6 +22,7 @@ class Database {
 		bool isEmpty ();
 
 		void addTable (Table* table);
+		void addTable (std::string tableName);
 		bool removeTable (std::string name);
 
 		Table*& tableAt (int index);

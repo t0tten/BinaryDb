@@ -92,6 +92,34 @@ std::string* BinaryDB::listAllDatabases () {
 	return NULL;
 }
 
+std::string* BinaryDB::listTablesOfDatabase (std::string database) {
+	int index = this->findDatabase(database);
+	if (index == -1) {
+		throw "";
+	}
+
+	return this->databases[index]->listTables();
+}
+
+int BinaryDB::getTableSizeOfDatabase (std::string database) {
+	int index = this->findDatabase(database);
+	if (index == -1) {
+		return index;
+	}
+
+	return this->databases[index]->getSize();
+}
+
+bool BinaryDB::createTableInDatabase(std::string database, std::string tableName) {
+	int index = this->findDatabase(database);
+	if (index == -1) {
+		throw "";
+	}
+
+	this->databases[index]->addTable(tableName);
+	return true;
+}
+
 int BinaryDB::getSize () {
 	return this->size;
 }

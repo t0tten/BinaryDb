@@ -24,6 +24,10 @@ class BinaryDB {
 		Database*& getDatabase (std::string name);
 
 		std::string* listAllDatabases ();
+		std::string* listTablesOfDatabase (std::string database);
+		int getTableSizeOfDatabase (std::string database);
+
+		bool createTableInDatabase(std::string database, std::string tableName);
 
 		int getSize ();
 		bool isEmpty ();

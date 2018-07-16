@@ -58,6 +58,11 @@ void Database::addTable (Table* table) {
 	this->size++;
 }
 
+void Database::addTable (std::string tableName) {
+	Table* table = new Table(tableName);
+	this->addTable(table);
+}
+
 bool Database::removeTable (std::string name) {
 	int index = -1;
 	for (int i = 0; i < this->size; i++) {
