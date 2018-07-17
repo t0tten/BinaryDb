@@ -4,22 +4,25 @@
 #include <algorithm>
 #include <vector>
 #include <iterator>
+#include <regex>
 
-#include "../include/Tree.h"
-#include "../include/StringItem.h"
-#include "../include/IntItem.h"
-#include "../include/DoubleItem.h"
-#include "../include/Record.h"
-#include "../include/Table.h"
-#include "../include/Database.h"
 #include "../include/BinaryDB.h"
 
 using namespace std;
 
 void showLogo();
-bool findTask(vector<string> commands);
+bool findTask(std::string input);
 bool assurance ();
 void printHelpSection();
+
+void listDB();
+void createDB(std::string database);
+void deleteDB(std::string database);
+
+void listTB(std::string database);
+void createTB(std::string database, std::string tableName);
+void deleteTB(std::string database, std::string tableName);
+
 
 BinaryDB binaryDB;
 
@@ -31,13 +34,8 @@ int main() {
 		std::string input = "";
 		getline(cin, input);
 
-		istringstream iss(input);
-		vector<string> commands {istream_iterator<string>(iss), istream_iterator<string>()};
-
-		if (findTask(commands)) return 0;
+		if (findTask(input)) return 0;
 	}
-
-
 }
 
 void showLogo () {
@@ -53,128 +51,28 @@ void showLogo () {
 	cout << " -------------------------------------------------------" << endl <<  endl;
 }
 
-bool findTask (vector<string> commands) {
+bool findTask (std::string input) {
 	bool exit = false;
-	
+	istringstream iss(input);
+	vector<string> commands {istream_iterator<string>(iss), istream_iterator<string>()};
+
 	if (commands.size() == 0) {
-		// Do nothing
-	} else if (commands.front() == "exit" || 
-		(commands.front().length() == 1 && commands.front() == ".")) {
-		
+	} else if (regex_match(input, regex("(exit|\\.)"))) {
 		exit = true;
-	} else if (commands.front() == "help" || 
-		(commands.front().length() == 1 && commands.front() == "?")) {
-		
+	} else if (regex_match(input, regex("(help|\\?)"))) {
 		printHelpSection();
-
-	// Database stuf here
-	} else if (commands.front().length() == 1 && commands.front() == "$") {
-		
-		// List all databases
-		std::string* databases = binaryDB.listAllDatabases();
-		if (databases != NULL)  {
-			cout << "Databases:" << endl;
-			for (int i = 0; i < binaryDB.getSize(); i++) {
-				cout << "\t$" << databases[i] << endl;
-			}
-		} else {
-			cout << "\t-> No databases exists" << endl;		
-		}
-	
-		delete[] databases;
-	} else if (commands.size() == 1 && 
-			commands.front().length() > 1 && 
-			commands.front()[0] == '$') {
-		// Create databas	
-		cout << "Create database " << commands.front() << "? (y/n): ";
-		if (assurance()) { 
-			if (binaryDB.createDatabase(commands.front().substr(1))) {
-				cout << "\t-> Database " << commands.front() << " added" << endl;
-			} else {
-				cout << "\t-> Database " << commands.front() << " already exist" << endl;
-			}
-		}
-
-	} else if (commands.size() == 1 && 
-			commands.front().length() > 2 && 
-			commands.front()[0] == '.' &&
-			commands.front()[1] == '$') {
-		// Delete database
-		cout << "Delete database " << commands.front().substr(1) << "? (y/n): ";
-		if (assurance()) {
-			if (binaryDB.deleteDatabase(commands.front().substr(2))) {
-				cout << "\t-> Database " << commands.front().substr(1) << " found" << endl;
-				cout << "\t-> Database " << commands.front().substr(1) << " deleted" << endl;
-			} else {
-				cout << "\t-> Database " << commands.front().substr(1) << " does not exist" << endl;
-			}
-		}
-
-	// Table stuf down here
-	} else if (commands.size() == 2 && 
-			commands.front().length() > 1 && 
-			commands.front()[0] == '$' &&
-			commands.at(1).length() == 1 &&
-			commands.at(1)[0] == '#') {
-		// List all tables of database
-		cout << "List tables (" << commands.front() << "):" << endl;
-
-		try {
-			int tableSize = binaryDB.getTableSizeOfDatabase(commands.front().substr(1));
-
-			if (tableSize > 0) {
-				std::string* tableNames = binaryDB.listTablesOfDatabase(commands.front().substr(1));
-				
-				for (int i = 0; i < tableSize; i++) {
-					cout << "\t#" << tableNames[i] << endl;
-				}
-				delete[] tableNames;
-			} else {
-				cout << "\t-> Database does not contain any tables" << endl;
-			}
-
-		} catch (const char* e) {
-			cout << "\t-> Database not found" << endl;
-		}
-
-	} else if (commands.size() == 2 && 
-			commands.front().length() > 1 && 
-			commands.front()[0] == '$' &&
-			commands.at(1).length() > 1 &&
-			commands.at(1)[0] == '#') {
-		// Create table in database
-		cout << "Create table " << commands.at(1) << " (" << commands.front() << ")? (y/n): ";
-		if (assurance()) { 
-			try {
-				if (binaryDB.createTableInDatabase(commands.front().substr(1), commands.at(1).substr(1))) {
-					cout << "\t-> Table " << commands.at(1) << " created in database " << commands.front() << "!" << endl;
-				} else {
-					cout << "\t-> Table already exists" << endl;
-				}
-			} catch (const char* e) {
-				cout << e << endl;
-			}
-		}
-
-	} else if (commands.size() == 2 && 
-			commands.front().length() > 1 && 
-			commands.front()[0] == '.' &&
-			commands.front()[1] == '$' &&
-			commands.at(1).length() > 1 &&
-			commands.at(1)[0] == '#') {
-		// Delete table in database
-		cout << "Delete table " << commands.at(1) << " (" << commands.front().substr(1) << ")? (y/n): ";
-		if (assurance()) {
-			try {
-				if(binaryDB.deleteTableFromDatabase(commands.front().substr(2), commands.at(1).substr(1))) {
-					cout << "\t-> Table " << commands.at(1) << " has been deleted from " << commands.front().substr(1) << "." << endl;
-				} else {
-					cout << "\t-> Table " << commands.at(1) << " in " << commands.front().substr(1) << " not found." << endl;
-				}
-			} catch (const char* e) {
-				cout << e << endl;
-			}
-		}
+	} else if (regex_match(input, regex("[$]"))) {
+		listDB();
+	} else if (regex_match(input, regex("[$][a-zA-Z0-9]+"))) {
+		createDB(commands.front());
+	} else if (regex_match(input, regex("\\.[$][a-zA-Z0-9]+"))) {
+		deleteDB(commands.front().substr(1));
+	} else if (regex_match(input, regex("[$][a-zA-Z0-9]+ #"))) {
+		listTB(commands.front());
+	} else if (regex_match(input, regex("[$][a-zA-Z0-9]+ #[a-zA-Z0-9]+"))) {
+		createTB(commands.front(), commands.at(1));
+	} else if (regex_match(input, regex("\\.[$][a-zA-Z0-9]+ #[a-zA-Z0-9]+"))) {
+		deleteTB(commands.front(), commands.at(1));
 	} else {
 		cout << " !!! invalid command !!!" << endl;
 	}
@@ -205,4 +103,91 @@ void printHelpSection() {
 	cout << "$<database name> #<table name>\t\tcreate a new table in a database" << endl;
 	cout << ".$<database name> #<table name>\t\tdelete a table from a database" << endl;
 	cout << endl;
+}
+
+void listDB() {
+	std::string* databases = binaryDB.listAllDatabases();
+	if (databases != NULL)  {
+		cout << "Databases:" << endl;
+		for (int i = 0; i < binaryDB.getSize(); i++) {
+			cout << "\t$" << databases[i] << endl;
+		}
+	} else {
+		cout << "\t-> No databases exists." << endl;		
+	}
+
+	delete[] databases;
+}
+
+void createDB(std::string database) {
+	cout << "Create database " << database << "? (y/n): ";
+	if (assurance()) { 
+		if (binaryDB.createDatabase(database.substr(1))) {
+			cout << "\t-> Database " << database << " added." << endl;
+		} else {
+			cout << "\t-> Database " << database << " already exist." << endl;
+		}
+	}
+}
+
+void deleteDB(std::string database) {
+	cout << "Delete database " << database << "? (y/n): ";
+	if (assurance()) {
+		if (binaryDB.deleteDatabase(database.substr(1))) {
+			cout << "\t-> Database " << database << " found." << endl;
+			cout << "\t-> Database " << database << " deleted." << endl;
+		} else {
+			cout << "\t-> Database " << database << " does not exist." << endl;
+		}
+	}
+}
+
+void listTB(std::string database) {
+	cout << "List tables (" << database << "):" << endl;
+
+	try {
+		int tableSize = binaryDB.getTableSizeOfDatabase(database.substr(1));
+		std::string* tableNames = binaryDB.listTablesOfDatabase(database.substr(1));
+		if (tableSize > 0) {
+			for (int i = 0; i < tableSize; i++) {
+				cout << "\t#" << tableNames[i] << endl;
+			}
+			delete[] tableNames;
+		} else {
+			cout << "\t-> Database does not contain any tables." << endl;
+		}
+
+	} catch (const char* e) {
+		cout << e << endl;
+	}
+}
+
+void createTB(std::string database, std::string tableName) {
+	cout << "Create table " << tableName << " (" << database << ")? (y/n): ";
+	if (assurance()) { 
+		try {
+			if (binaryDB.createTableInDatabase(database.substr(1), tableName.substr(1))) {
+				cout << "\t-> Table " << tableName << " created in database " << database << "!" << endl;
+			} else {
+				cout << "\t-> Table already exists" << endl;
+			}
+		} catch (const char* e) {
+			cout << e << endl;
+		}
+	}
+}
+
+void deleteTB(std::string database, std::string tableName) {
+	cout << "Delete table " << tableName << " (" << database.substr(1) << ")? (y/n): ";
+	if (assurance()) {
+		try {
+			if(binaryDB.deleteTableFromDatabase(database.substr(2), tableName.substr(1))) {
+				cout << "\t-> Table " << tableName << " has been deleted from " << database.substr(1) << "." << endl;
+			} else {
+				cout << "\t-> Table " << tableName << " in " << database.substr(1) << " not found." << endl;
+			}
+		} catch (const char* e) {
+			cout << e << endl;
+		}
+	}
 }

@@ -95,7 +95,7 @@ std::string* BinaryDB::listAllDatabases () {
 std::string* BinaryDB::listTablesOfDatabase (std::string database) {
 	int index = this->findDatabase(database);
 	if (index == -1) {
-		throw "";
+		throw "\t-> No database found.";
 	}
 
 	return this->databases[index]->listTables();
