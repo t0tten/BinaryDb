@@ -28,6 +28,7 @@ class BinaryDB {
 		int getTableSizeOfDatabase (std::string database);
 
 		bool createTableInDatabase(std::string database, std::string tableName);
+		bool deleteTableFromDatabase(std::string database, std::string tableName);
 
 		int getSize ();
 		bool isEmpty ();

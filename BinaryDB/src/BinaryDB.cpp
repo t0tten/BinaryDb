@@ -113,11 +113,20 @@ int BinaryDB::getTableSizeOfDatabase (std::string database) {
 bool BinaryDB::createTableInDatabase(std::string database, std::string tableName) {
 	int index = this->findDatabase(database);
 	if (index == -1) {
-		throw "";
+		throw "\t-> No database found.";
 	}
 
 	this->databases[index]->addTable(tableName);
 	return true;
+}
+
+bool BinaryDB::deleteTableFromDatabase(std::string database, std::string tableName) {
+	int index = this->findDatabase(database);
+	if(index == -1) {
+		throw "\t-> No database found.";
+	}
+
+	return this->databases[index]->removeTable(tableName);
 }
 
 int BinaryDB::getSize () {

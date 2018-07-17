@@ -152,7 +152,7 @@ bool findTask (vector<string> commands) {
 					cout << "\t-> Table already exists" << endl;
 				}
 			} catch (const char* e) {
-				cout << "\t-> Database not found" << endl;
+				cout << e << endl;
 			}
 		}
 
@@ -164,7 +164,17 @@ bool findTask (vector<string> commands) {
 			commands.at(1)[0] == '#') {
 		// Delete table in database
 		cout << "Delete table " << commands.at(1) << " (" << commands.front().substr(1) << ")? (y/n): ";
-		if (assurance()) { cout << "GO" << endl; }
+		if (assurance()) {
+			try {
+				if(binaryDB.deleteTableFromDatabase(commands.front().substr(2), commands.at(1).substr(1))) {
+					cout << "\t-> Table " << commands.at(1) << " has been deleted from " << commands.front().substr(1) << "." << endl;
+				} else {
+					cout << "\t-> Table " << commands.at(1) << " in " << commands.front().substr(1) << " not found." << endl;
+				}
+			} catch (const char* e) {
+				cout << e << endl;
+			}
+		}
 	} else {
 		cout << " !!! invalid command !!!" << endl;
 	}

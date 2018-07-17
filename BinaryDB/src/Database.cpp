@@ -77,6 +77,7 @@ bool Database::removeTable (std::string name) {
 		this->tables[index] = this->tables[this->size - 1];
 		this->tables[this->size - 1] = NULL;
 		this->size--;
+		return true;
 	}
 
 	return false;
